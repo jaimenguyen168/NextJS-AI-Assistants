@@ -9,4 +9,9 @@ export default defineSchema({
     credits: v.number(),
     orderId: v.optional(v.string()),
   }),
+
+  userAIAssistant: defineTable({
+    userId: v.string(),
+    assistantId: v.number(),
+  }),
 });

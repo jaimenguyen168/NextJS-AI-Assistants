@@ -1,4 +1,4 @@
-import { mutation } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
 export const createUser = mutation({
@@ -28,5 +28,17 @@ export const createUser = mutation({
     await ctx.db.insert("users", newUser);
 
     return newUser;
+  },
+});
+
+export const getUser = query({
+  args: {
+    email: v.string(),
+  },
+  handler: async (ctx, { email }) => {
+    return await ctx.db
+      .query("users")
+      .filter((q) => q.eq(q.field("email"), email))
+      .first();
   },
 });

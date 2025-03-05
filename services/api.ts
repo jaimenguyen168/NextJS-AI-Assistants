@@ -6,5 +6,5 @@ export const getAuthUserData = async (token: string) => {
       headers: { Authorization: "Bearer" + token },
     })
     .then((res) => res.data)
-    .catch((err) => console.log(err));
+    .catch((err) => err);
 };
