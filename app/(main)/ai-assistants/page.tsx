@@ -1,23 +1,47 @@
 "use client";
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { aiAssistantList } from "@/constants";
 import Image from "next/image";
 import { Checkbox } from "@/components/ui/checkbox";
 import { BlurFade } from "@/components/magicui/blur-fade";
-import { useMutation } from "convex/react";
+import { useConvex, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { AuthContext } from "@/context/AuthContext";
 import { Loader2Icon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const AIAssistants = () => {
   const { user } = useContext(AuthContext);
   const insertAIAssistant = useMutation(
     api.userAIAssistant.insertUserAIAssistant,
   );
+  const convex = useConvex();
+  const router = useRouter();
+
   const [selectedAssistants, setSelectedAssistants] = useState<number[]>([]);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    user &&
+      getUserAssistants().catch((err) => {
+        console.error("Error in getUserAssistants:", err);
+      });
+  }, [user]);
+
+  const getUserAssistants = async () => {
+    const result = await convex.query(
+      api.userAIAssistant.getAllUserAIAssistants,
+      {
+        userId: user._id,
+      },
+    );
+
+    if (result) {
+      router.replace("/workspace");
+    }
+  };
 
   const handleSelect = (selectedId: number) => {
     if (selectedAssistants.includes(selectedId)) {
@@ -66,7 +90,7 @@ const AIAssistants = () => {
           onClick={handleContinue}
           disabled={selectedAssistants.length === 0 || loading}
         >
-          {loading ? <Loader2Icon className="animate-spin" /> : "Continue"}
+          {loading && <Loader2Icon className="animate-spin" />} Continue
         </Button>
       </div>
 
