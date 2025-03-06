@@ -38,7 +38,7 @@ const AIAssistants = () => {
       },
     );
 
-    if (result) {
+    if (result.length > 0) {
       router.replace("/workspace");
     }
   };
@@ -66,7 +66,9 @@ const AIAssistants = () => {
         assistantIdList: selectedAssistants,
       });
 
-      console.log(result);
+      if (result.length > 0) {
+        router.push("/workspace");
+      }
     } catch (err) {
       console.log(err);
     } finally {

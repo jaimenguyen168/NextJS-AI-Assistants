@@ -1,13 +1,14 @@
 "use client";
 
 import React, { ReactNode, useContext, useEffect, useState } from "react";
-import Header from "@/app/(main)/_conponents/Header";
+import Header from "@/app/(main)/_components/Header";
 import { getAuthUserData } from "@/services/api";
 import { useRouter } from "next/navigation";
-import { useConvex, useQuery } from "convex/react";
+import { useConvex } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { AuthContext } from "@/context/AuthContext";
 import { Spinner } from "@/components/ui/spinner";
+import { AssistantContext } from "@/context/AssistantContext";
 
 const MainProvider = ({
   children,
@@ -15,6 +16,8 @@ const MainProvider = ({
   children: ReactNode;
 }>) => {
   const { setUser } = useContext(AuthContext);
+  const [currentAssistant, setCurrentAssistant] = useState();
+
   const router = useRouter();
   const convex = useConvex();
   const [loading, setLoading] = useState(true);
@@ -69,8 +72,12 @@ const MainProvider = ({
 
   return (
     <div>
-      <Header />
-      {children}
+      <AssistantContext.Provider
+        value={{ currentAssistant, setCurrentAssistant }}
+      >
+        <Header />
+        {children}
+      </AssistantContext.Provider>
     </div>
   );
 };

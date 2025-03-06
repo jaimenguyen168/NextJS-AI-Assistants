@@ -6,7 +6,7 @@ const Header = () => {
   const { user } = useContext(AuthContext);
 
   return (
-    <div className="py-4 px-6 shadow-md flex items-center justify-between">
+    <div className="py-4 px-6 fixed shadow-md flex items-center justify-between">
       <Image src="/logo.svg" alt="logo" width={40} height={40} />
 
       <Image
