@@ -13,5 +13,12 @@ export default defineSchema({
   userAIAssistant: defineTable({
     userId: v.string(),
     assistantId: v.number(),
+    aiModelId: v.optional(v.number()),
+    name: v.string(),
+    title: v.string(),
+    image: v.string(),
+    instruction: v.string(),
+    userInstruction: v.string(),
+    sampleQuestions: v.array(v.string()),
   }),
 });

@@ -4,16 +4,18 @@ import { v } from "convex/values";
 export const insertUserAIAssistant = mutation({
   args: {
     userId: v.string(),
-    assistantIdList: v.array(v.number()),
+    assistantList: v.any(),
+    aiModelId: v.optional(v.number()),
   },
-  handler: async (ctx, { userId, assistantIdList }) => {
+  handler: async (ctx, { userId, assistantList, aiModelId }) => {
     await deleteUserAIAssistantByUserId(ctx, { userId });
 
     return await Promise.all(
-      assistantIdList.map(async (assistantId: number) => {
+      assistantList.map(async (assistant: any) => {
         return await ctx.db.insert("userAIAssistant", {
           userId,
-          assistantId,
+          aiModelId: aiModelId || 1, // Default to "Google: Gemini 2.0 Flash"
+          ...assistant,
         });
       }),
     );

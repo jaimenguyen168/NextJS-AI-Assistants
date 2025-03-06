@@ -1,6 +1,6 @@
 export const aiAssistantList = [
   {
-    id: 1,
+    assistantId: 1,
     name: "Jack",
     title: "Fitness Coach 💪",
     image: "/fitness-coach.png",
@@ -14,7 +14,7 @@ export const aiAssistantList = [
     ],
   },
   {
-    id: 2,
+    assistantId: 2,
     name: "Emma",
     title: "Grammar Fixer ✍️",
     image: "/grammer-fixer.jpg",
@@ -28,7 +28,7 @@ export const aiAssistantList = [
     ],
   },
   {
-    id: 3,
+    assistantId: 3,
     name: "Olivia",
     title: "Email Writer & Reply Assistant 📩",
     image: "/email-writer.avif",
@@ -42,7 +42,7 @@ export const aiAssistantList = [
     ],
   },
   {
-    id: 4,
+    assistantId: 4,
     name: "Liam",
     title: "YouTube Script Writer 🎬",
     image: "/youtube-script-writer.jpg",
@@ -56,7 +56,7 @@ export const aiAssistantList = [
     ],
   },
   {
-    id: 5,
+    assistantId: 5,
     name: "Harry",
     title: "Code Writer 💻",
     image: "/code-writer.jpg",
@@ -70,7 +70,7 @@ export const aiAssistantList = [
     ],
   },
   {
-    id: 6,
+    assistantId: 6,
     name: "James",
     title: "Bug Finder 🐛",
     image: "/bug-fixer.avif",
@@ -84,7 +84,7 @@ export const aiAssistantList = [
     ],
   },
   {
-    id: 7,
+    assistantId: 7,
     name: "William",
     title: "Finance Assistant 💰",
     image: "/finanace.avif",
@@ -98,7 +98,7 @@ export const aiAssistantList = [
     ],
   },
   {
-    id: 8,
+    assistantId: 8,
     name: "Ava",
     title: "Virtual Girlfriend 💖",
     image: "/virtual-girl.jpg",
@@ -112,7 +112,7 @@ export const aiAssistantList = [
     ],
   },
   {
-    id: 9,
+    assistantId: 9,
     name: "Ethan",
     title: "Virtual Boyfriend 💙",
     image: "/ethan.avif",
@@ -126,7 +126,7 @@ export const aiAssistantList = [
     ],
   },
   {
-    id: 10,
+    assistantId: 10,
     name: "Mia",
     title: "Personal Tutor 📚",
     image: "/personal-tutor.jpg",
@@ -138,5 +138,43 @@ export const aiAssistantList = [
       "📝 What are some tips for improving my writing skills?",
       "⚖️ Can you help me understand Newton’s laws of motion?",
     ],
+  },
+];
+
+export const aiModelList = [
+  {
+    id: 1,
+    name: "Google: Gemini 2.0 Flash",
+    edenAi: "google/gemini-2.0-flash",
+    // model: 'google/gemini-2.0-flash-lite-001',//OpenRouter.ai
+    logo: "/google.png",
+  },
+  {
+    id: 2,
+    name: "OpenAI: GPT-4o-mini",
+    edenAi: "openai/gpt-4o-mini",
+    // model: 'openai/gpt-4o-mini',//OpenRouter.ai
+    logo: "/chatgpt.png",
+  },
+  {
+    id: 3,
+    name: "OpenAI: GPT-3.5 Turbo",
+    edenAi: "openai/gpt-4o-mini",
+    // model: 'openai/gpt-3.5-turbo',//OpenRouter.ai
+    logo: "/chatgpt.png",
+  },
+  {
+    id: 4,
+    name: "Mistral: Saba",
+    edenAi: "mistral/pixtral-large-latest",
+    // model: 'mistralai/mistral-saba',//OpenRouter.ai
+    logo: "/Mistral.png",
+  },
+  {
+    id: 5,
+    name: "anthropic",
+    edenAi: "anthropic/claude-3-5-haiku-latest",
+    // model: 'mistralai/mistral-saba',//OpenRouter.ai
+    logo: "/anthropic.png",
   },
 ];

@@ -38,16 +38,17 @@ const AssistantList = () => {
       console.log(result);
       if (result.length === 0) router.replace("/ai-assistants");
 
-      setAssistantList(
-        result.map((assistant: any) =>
-          aiAssistantList.find((a) => a.id === assistant.assistantId),
-        ),
-      );
+      setAssistantList(result);
     } catch (err) {
       console.error(err);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSelectAssistant = (assistant: any) => {
+    setCurrentAssistant(assistant);
+    console.log(currentAssistant);
   };
 
   if (loading) {
@@ -68,10 +69,10 @@ const AssistantList = () => {
       <div className="mt-6 space-y-3">
         {assistantList.map((assistant: any) => (
           <div
-            key={assistant.id}
-            onClick={() => setCurrentAssistant(assistant)}
+            key={assistant.assistantId}
+            onClick={() => handleSelectAssistant(assistant)}
             className={`p-2 flex gap-3 items-center hover:bg-gray-200 hover:dark:bg-slate-700 hover:scale-105 rounded-2xl ${
-              currentAssistant?.id === assistant.id &&
+              currentAssistant?.assistantId === assistant.assistantId &&
               "bg-gray-200 dark:bg-slate-700"
             }`}
           >

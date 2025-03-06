@@ -75,7 +75,6 @@ const MainProvider = ({
       <AssistantContext.Provider
         value={{ currentAssistant, setCurrentAssistant }}
       >
-        <Header />
         {children}
       </AssistantContext.Provider>
     </div>
