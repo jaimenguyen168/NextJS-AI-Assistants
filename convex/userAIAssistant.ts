@@ -5,7 +5,7 @@ export const insertUserAIAssistant = mutation({
   args: {
     userId: v.string(),
     assistantList: v.any(),
-    aiModelId: v.optional(v.number()),
+    aiModelId: v.optional(v.string()),
   },
   handler: async (ctx, { userId, assistantList, aiModelId }) => {
     await deleteUserAIAssistantByUserId(ctx, { userId });
@@ -14,7 +14,7 @@ export const insertUserAIAssistant = mutation({
       assistantList.map(async (assistant: any) => {
         return await ctx.db.insert("userAIAssistant", {
           userId,
-          aiModelId: aiModelId || 1, // Default to "Google: Gemini 2.0 Flash"
+          aiModelId: aiModelId || "Google: Gemini 2.0 Flash",
           ...assistant,
         });
       }),
@@ -51,5 +51,19 @@ export const getAllUserAIAssistants = query({
       .query("userAIAssistant")
       .filter((q) => q.eq(q.field("userId"), userId))
       .collect();
+  },
+});
+
+export const updateUserAIAssistant = mutation({
+  args: {
+    id: v.id("userAIAssistant"),
+    userInstruction: v.string(),
+    aiModelId: v.string(),
+  },
+  handler: async (ctx, { id, aiModelId, userInstruction }) => {
+    return await ctx.db.patch(id, {
+      aiModelId,
+      userInstruction,
+    });
   },
 });
