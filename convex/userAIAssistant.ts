@@ -42,6 +42,15 @@ export const deleteUserAIAssistantByUserId = mutation({
   },
 });
 
+export const deleteUserAIAssistantById = mutation({
+  args: {
+    id: v.id("userAIAssistant"),
+  },
+  handler: async (ctx, { id }) => {
+    await ctx.db.delete(id);
+  },
+});
+
 export const getAllUserAIAssistants = query({
   args: {
     userId: v.string(),

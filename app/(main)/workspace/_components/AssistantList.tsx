@@ -11,6 +11,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { aiAssistantList } from "@/constants";
 import Image from "next/image";
 import { AssistantContext } from "@/context/AssistantContext";
+import { BlurFade } from "@/components/magicui/blur-fade";
 
 const AssistantList = () => {
   const { user } = useContext(AuthContext);
@@ -24,7 +25,7 @@ const AssistantList = () => {
 
   useEffect(() => {
     getUserAssistants().then((r) => {});
-  }, [user]);
+  }, [user && currentAssistant === null]);
 
   const getUserAssistants = async (): Promise<void> => {
     try {
@@ -68,28 +69,34 @@ const AssistantList = () => {
 
       <div className="mt-6 space-y-3">
         {assistantList.map((assistant: any) => (
-          <div
+          <BlurFade
             key={assistant.assistantId}
-            onClick={() => handleSelectAssistant(assistant)}
-            className={`p-2 flex gap-3 items-center hover:bg-gray-200 hover:dark:bg-slate-700 hover:scale-105 rounded-2xl ${
-              currentAssistant?.assistantId === assistant.assistantId &&
-              "bg-gray-200 dark:bg-slate-700"
-            }`}
+            delay={0.25 + assistant.assistantId * 0.05}
+            inView
           >
-            <Image
-              src={assistant.image}
-              alt={assistant.title}
-              width={60}
-              height={60}
-              className="rounded-xl w-[60px] h-[60px] object-cover"
-            />
-            <div>
-              <h2 className="font-semibold">{assistant.name}</h2>
-              <h3 className="text-gray-600 text-sm dark:text-gray-300">
-                {assistant.title}
-              </h3>
+            <div
+              key={assistant.assistantId}
+              onClick={() => handleSelectAssistant(assistant)}
+              className={`p-2 flex gap-3 items-center hover:bg-gray-200 hover:dark:bg-slate-700 hover:scale-105 rounded-2xl ${
+                currentAssistant?.assistantId === assistant.assistantId &&
+                "bg-gray-200 dark:bg-slate-700"
+              }`}
+            >
+              <Image
+                src={assistant.image}
+                alt={assistant.title}
+                width={60}
+                height={60}
+                className="rounded-xl w-[60px] h-[60px] object-cover"
+              />
+              <div>
+                <h2 className="font-semibold">{assistant.name}</h2>
+                <h3 className="text-gray-600 text-sm dark:text-gray-300">
+                  {assistant.title}
+                </h3>
+              </div>
             </div>
-          </div>
+          </BlurFade>
         ))}
       </div>
 
