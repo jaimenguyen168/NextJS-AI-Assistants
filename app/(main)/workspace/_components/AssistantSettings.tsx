@@ -146,16 +146,20 @@ const AssistantSettings = () => {
         <div className="absolute bottom-12 sm:w-[80%] xl:w-[86%] sm:right-6 xl:right-8 flex justify-between">
           <Button
             onClick={handleSaveAssistant}
-            className="w-[40%] hover:scale-105"
+            className="w-[40%] hover:scale-105 cursor-pointer"
             disabled={loading}
           >
             {loading ? <Loader2Icon /> : <Save />}
-            Save
+            <span className="hidden lg:block">Save</span>
           </Button>
           <ConfirmationAlert onDelete={handleConfirmDelete}>
-            <Button className="w-[40%]" variant="ghost" disabled={loading}>
+            <Button
+              className="w-[40%] border border-slate-300 cursor-pointer hover:scale-105"
+              variant="ghost"
+              disabled={loading}
+            >
               <Trash />
-              Delete
+              <span className="hidden lg:block">Delete</span>
             </Button>
           </ConfirmationAlert>
         </div>

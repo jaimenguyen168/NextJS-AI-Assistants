@@ -63,7 +63,10 @@ const AssistantList = () => {
   return (
     <div className="p-5 bg-secondary border-r-[1px] h-screen space-y-3 relative">
       <h2 className="font-bold text-lg">Your Personal AI Assistants</h2>
-      <Button className="w-full">+ Add New Assistant</Button>
+      <Button className="w-full">
+        <span className="lg:block md:hidden">+ Add New Assistant</span>
+        <span className="lg:hidden md:block">Add</span>
+      </Button>
 
       <Input className="bg-white" placeholder="Search" />
 
@@ -100,7 +103,7 @@ const AssistantList = () => {
         ))}
       </div>
 
-      <div className="w-[80%] ml-2 p-2 absolute bottom-12 flex cursor-pointer gap-3 items-center hover:bg-gray-200 hover:dark:bg-slate-700 hover:scale-105 rounded-2xl">
+      <div className="w-[80%] ml-2 p-2 absolute bottom-12 flex flex-col lg:flex-row cursor-pointer gap-3 items-center hover:bg-gray-200 hover:dark:bg-slate-700 hover:scale-105 rounded-2xl">
         <Image
           src={user?.profileImage}
           alt="profile image"
