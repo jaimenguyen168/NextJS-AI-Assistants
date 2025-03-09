@@ -63,7 +63,7 @@ const AssistantChat = () => {
         currentAssistant.instruction +
         " : " +
         currentAssistant.userInstruction,
-      aiLastMessage: messages.length >= 2 ? messages[messages.length - 2] : "",
+      aiLastMessage: messages[messages.length - 2]?.content,
     });
 
     setLoading(false);

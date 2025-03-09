@@ -22,17 +22,21 @@ export async function POST(request: NextRequest) {
           },
         ],
       },
-      {
-        role: "assistant",
-        content: [
-          {
-            type: "text",
-            content: {
-              text: aiLastMessage,
+      ...(aiLastMessage
+        ? [
+            {
+              role: "assistant",
+              content: [
+                {
+                  type: "text",
+                  content: {
+                    text: aiLastMessage,
+                  },
+                },
+              ],
             },
-          },
-        ],
-      },
+          ]
+        : []),
     ],
   });
 
