@@ -12,6 +12,7 @@ import { aiAssistantList } from "@/constants";
 import Image from "next/image";
 import { AssistantContext } from "@/context/AssistantContext";
 import { BlurFade } from "@/components/magicui/blur-fade";
+import AddNewAssistantDialog from "@/app/(main)/workspace/_components/AddNewAssistantDialog";
 
 const AssistantList = () => {
   const { user } = useContext(AuthContext);
@@ -41,7 +42,7 @@ const AssistantList = () => {
 
       setAssistantList(result);
     } catch (err) {
-      console.error(err);
+      router.replace("/signin");
     } finally {
       setLoading(false);
     }
@@ -63,10 +64,12 @@ const AssistantList = () => {
   return (
     <div className="p-5 bg-secondary border-r-[1px] h-screen space-y-3 relative">
       <h2 className="font-bold text-lg">Your Personal AI Assistants</h2>
-      <Button className="w-full">
-        <span className="lg:block md:hidden">+ Add New Assistant</span>
-        <span className="lg:hidden md:block">Add</span>
-      </Button>
+      <AddNewAssistantDialog>
+        <Button className="w-full">
+          <span className="lg:block md:hidden">+ Add New Assistant</span>
+          <span className="lg:hidden md:block">Add</span>
+        </Button>
+      </AddNewAssistantDialog>
 
       <Input className="bg-white" placeholder="Search" />
 
