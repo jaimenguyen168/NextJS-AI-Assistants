@@ -29,6 +29,11 @@ const AssistantList = () => {
   }, [user && currentAssistant === null]);
 
   const getUserAssistants = async (): Promise<void> => {
+    if (!user) {
+      router.replace("/signin");
+      return;
+    }
+
     try {
       const result = await convex.query(
         api.userAIAssistant.getAllUserAIAssistants,
