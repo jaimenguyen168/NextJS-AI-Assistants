@@ -39,8 +39,8 @@ const UserDetails = () => {
   const { user } = useContext(AuthContext);
   const hasOrderId = user?.orderId;
   const userCredits = user?.credits;
-  const usedCredits = 157;
-  const creditProgress = (usedCredits / userCredits) * 100;
+  const userTokens = user?.tokens;
+  const creditProgress = (userTokens / userCredits) * 100;
 
   return (
     <div className="space-y-3">
@@ -65,7 +65,7 @@ const UserDetails = () => {
         <div>
           <h2 className="font-semibold">Token Usage</h2>
           <h3>
-            {usedCredits} / {userCredits}
+            {userTokens.toLocaleString()} / {userCredits.toLocaleString()}
           </h3>
         </div>
         <Progress value={creditProgress} />
@@ -89,7 +89,7 @@ const UserDetails = () => {
           <div className="p-4 border rounded-2xl flex flex-col gap-3">
             <div className="flex justify-between">
               <div>
-                <h2 className="font-bold text-lg">Pro Plan</h2>
+                <h2 className="font-bold text-lg">Premium Plan</h2>
                 <h2>500,000 Tokens</h2>
               </div>
 

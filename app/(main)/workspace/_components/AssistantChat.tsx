@@ -7,6 +7,9 @@ import { aiModelList } from "@/constants";
 import { AssistantContext } from "@/context/AssistantContext";
 import axios from "axios";
 import Image from "next/image";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { AuthContext } from "@/context/AuthContext";
 
 type Message = {
   role: string;
@@ -15,10 +18,14 @@ type Message = {
 
 const AssistantChat = () => {
   const scrollRef = useRef<any>(null);
+  const { user, setUser } = useContext(AuthContext);
   const { currentAssistant } = useContext(AssistantContext);
+
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const updateUserTokens = useMutation(api.userAIAssistant.updateUserTokens);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -67,6 +74,22 @@ const AssistantChat = () => {
     setLoading(false);
     setMessages((prev) => prev.slice(0, -1));
     setMessages((prev) => [...prev, result.data]);
+
+    await handleUserToken(result.data?.content);
+  };
+
+  const handleUserToken = async (text?: string) => {
+    const tokens = text ? text.trim().split(" ").length : 0;
+
+    await updateUserTokens({
+      id: user?._id,
+      tokens: tokens,
+    });
+
+    setUser((user: any) => ({
+      ...user,
+      tokens: user.tokens + tokens,
+    }));
   };
 
   return (
@@ -89,8 +112,8 @@ const AssistantChat = () => {
             <div className="flex gap-4">
               {message.role === "assistant" && (
                 <Image
-                  src={currentAssistant?.image}
-                  alt={currentAssistant?.title}
+                  src={currentAssistant?.assistant.image}
+                  alt={currentAssistant?.assistant.title}
                   width={100}
                   height={100}
                   className="w-[40px] h-[40px] rounded-full"

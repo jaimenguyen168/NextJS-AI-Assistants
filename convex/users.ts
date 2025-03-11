@@ -23,7 +23,7 @@ export const createUser = mutation({
       name,
       email,
       profileImage,
-      credits: 5000,
+      credits: 50000,
     };
     await ctx.db.insert("users", newUser);
 

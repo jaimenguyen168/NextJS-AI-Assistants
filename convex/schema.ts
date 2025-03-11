@@ -7,6 +7,7 @@ export default defineSchema({
     email: v.string(),
     profileImage: v.string(),
     credits: v.number(),
+    tokens: v.optional(v.number()),
     orderId: v.optional(v.string()),
   }),
 

@@ -192,3 +192,19 @@ export const updateUserAIAssistant = mutation({
     return await ctx.db.get(id);
   },
 });
+
+export const updateUserTokens = mutation({
+  args: {
+    id: v.id("users"),
+    tokens: v.number(),
+  },
+  handler: async (ctx, { id, tokens }) => {
+    const user = await ctx.db.get(id);
+    const currentTokens = user?.tokens ?? 0;
+    const updatedTokens = currentTokens + tokens;
+
+    await ctx.db.patch(id, {
+      tokens: updatedTokens,
+    });
+  },
+});
