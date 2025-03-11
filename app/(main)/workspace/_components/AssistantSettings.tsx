@@ -142,7 +142,7 @@ const AssistantSettings = () => {
           </div>
         </BlurFade>
 
-        <div className="absolute bottom-12 sm:w-[80%] xl:w-[86%] sm:right-6 xl:right-8 flex justify-between">
+        <div className="absolute justify-end bottom-12 sm:w-[80%] xl:w-[86%] sm:right-6 xl:right-8 flex gap-6">
           <Button
             onClick={handleSaveAssistant}
             className="w-[40%] hover:scale-105 cursor-pointer"

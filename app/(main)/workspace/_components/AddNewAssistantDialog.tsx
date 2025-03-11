@@ -26,6 +26,7 @@ import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { AuthContext } from "@/context/AuthContext";
 import { AssistantContext } from "@/context/AssistantContext";
+import { Check, Loader2Icon, XCircle } from "lucide-react";
 
 const AddNewAssistantDialog = ({ children }: { children: ReactNode }) => {
   const [open, setOpen] = useState(false);
@@ -83,7 +84,8 @@ const AddNewAssistantForm = ({ onSuccess }: { onSuccess: () => void }) => {
     if (
       !selectedAssistant.name ||
       !selectedAssistant.title ||
-      !selectedAssistant.userInstruction
+      !selectedAssistant.userInstruction ||
+      !selectedAssistant.aiModelId
     ) {
       toast("Please fill in all the fields");
       return;
@@ -217,8 +219,14 @@ const AddNewAssistantForm = ({ onSuccess }: { onSuccess: () => void }) => {
         </div>
 
         <div className="flex items-center justify-end gap-3 mt-10">
-          <Button variant="secondary">Cancel</Button>
-          <Button onClick={handleSubmit}>Submit</Button>
+          <Button variant="secondary">
+            <XCircle />
+            Cancel
+          </Button>
+          <Button onClick={handleSubmit}>
+            {loading ? <Loader2Icon className="animate-spin" /> : <Check />}
+            Submit
+          </Button>
         </div>
       </div>
     </div>
