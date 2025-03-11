@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useContext, useEffect, useRef, useState } from "react";
 import EmptyChatState from "@/app/(main)/workspace/_components/EmptyChatState";
 import { Input } from "@/components/ui/input";

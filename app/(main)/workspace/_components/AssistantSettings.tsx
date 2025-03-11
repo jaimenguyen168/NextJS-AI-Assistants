@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useContext, useState } from "react";
 import { AssistantContext } from "@/context/AssistantContext";
 import Image from "next/image";
@@ -26,7 +24,7 @@ const AssistantSettings = () => {
   const updateAssistant = useMutation(
     api.userAIAssistant.updateUserAIAssistant,
   );
-  const deleteAssistant = useMutation(
+  const deleteUserAIAssistant = useMutation(
     api.userAIAssistant.deleteUserAIAssistantById,
   );
   const [loading, setLoading] = useState(false);
@@ -36,8 +34,6 @@ const AssistantSettings = () => {
       ...prev,
       [field]: value,
     }));
-
-    console.log(currentAssistant);
   };
 
   const handleSaveAssistant = async () => {
@@ -62,8 +58,7 @@ const AssistantSettings = () => {
 
   const handleConfirmDelete = async () => {
     setLoading(true);
-    console.log("handleConfirmDelete");
-    await deleteAssistant({ id: currentAssistant?._id });
+    await deleteUserAIAssistant({ id: currentAssistant?._id });
 
     setCurrentAssistant(null);
     setLoading(false);
@@ -77,16 +72,16 @@ const AssistantSettings = () => {
         <BlurFade delay={0.25}>
           <div className="flex gap-3 items-center">
             <Image
-              src={currentAssistant?.image}
-              alt={currentAssistant?.title}
+              src={currentAssistant?.assistant.image}
+              alt={currentAssistant?.assistant.title}
               width={80}
               height={80}
-              className="rounded-full w-[80px] h-[80px]"
+              className="rounded-full w-[80px] h-[80px] object-cover shrink-0"
             />
             <div>
-              <h2 className="font-bold">{currentAssistant?.name}</h2>
+              <h2 className="font-bold">{currentAssistant?.assistant.name}</h2>
               <p className="text-gray-700 dark:text-gray-300">
-                {currentAssistant?.title}
+                {currentAssistant?.assistant.title}
               </p>
             </div>
           </div>
@@ -135,7 +130,7 @@ const AssistantSettings = () => {
             <Textarea
               placeholder="Add instruction here"
               className="h-[180px] bg-white"
-              value={currentAssistant?.userInstruction}
+              value={currentAssistant?.assistant.userInstruction}
               onChange={(e) => {
                 handleOnInputChange("userInstruction", e.target.value);
               }}

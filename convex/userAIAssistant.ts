@@ -12,33 +12,81 @@ export const insertUserAIAssistant = mutation({
 
     return await Promise.all(
       assistantList.map(async (assistant: any) => {
+        const assistantId = await insertAIAssistant(ctx, {
+          name: assistant.name,
+          title: assistant.title,
+          image: assistant.image,
+          instruction: assistant.instruction,
+          sampleQuestions: assistant.sampleQuestions,
+        });
+
         return await ctx.db.insert("userAIAssistant", {
           userId,
+          assistantId,
           aiModelId: aiModelId || "Google: Gemini 2.0 Flash",
-          ...assistant,
+          userInstruction: assistant.userInstruction || "",
         });
       }),
     );
   },
 });
 
+export const insertAIAssistant = mutation({
+  args: {
+    name: v.string(),
+    title: v.string(),
+    image: v.string(),
+    instruction: v.string(),
+    sampleQuestions: v.optional(v.array(v.string())),
+  },
+  handler: async (
+    ctx,
+    { name, title, image, instruction, sampleQuestions },
+  ) => {
+    return await ctx.db.insert("aiAssistant", {
+      name,
+      title,
+      image,
+      instruction,
+      sampleQuestions: sampleQuestions || [],
+    });
+  },
+});
+
 export const deleteUserAIAssistantByUserId = mutation({
   args: {
-    userId: v.string(), // The userId to match
+    userId: v.string(),
   },
   handler: async (ctx, { userId }) => {
-    // Fetch all documents where userId matches
     const userAIAssistants = await ctx.db
       .query("userAIAssistant")
       .filter((q) => q.eq(q.field("userId"), userId))
       .collect();
 
-    // Delete each matching document
+    const assistantIds = userAIAssistants.map((doc) => doc.assistantId);
+
     await Promise.all(
       userAIAssistants.map(async (doc) => {
         await ctx.db.delete(doc._id);
       }),
     );
+
+    if (assistantIds.length > 0) {
+      await Promise.all(
+        assistantIds.map(async (assistantId: any) => {
+          await deleteAIAssistantById(ctx, { assistantId });
+        }),
+      );
+    }
+  },
+});
+
+export const deleteAIAssistantById = mutation({
+  args: {
+    assistantId: v.id("aiAssistant"),
+  },
+  handler: async (ctx, { assistantId }) => {
+    await ctx.db.delete(assistantId);
   },
 });
 
@@ -47,6 +95,13 @@ export const deleteUserAIAssistantById = mutation({
     id: v.id("userAIAssistant"),
   },
   handler: async (ctx, { id }) => {
+    const userAIAssistant = await ctx.db
+      .query("userAIAssistant")
+      .filter((q) => q.eq(q.field("_id"), id))
+      .first();
+    const assistantId = userAIAssistant?.assistantId as any;
+    await deleteAIAssistantById(ctx, { assistantId });
+
     await ctx.db.delete(id);
   },
 });
@@ -56,10 +111,24 @@ export const getAllUserAIAssistants = query({
     userId: v.string(),
   },
   handler: async (ctx, { userId }) => {
-    return await ctx.db
+    const userAssistants = await ctx.db
       .query("userAIAssistant")
       .filter((q) => q.eq(q.field("userId"), userId))
       .collect();
+
+    return await Promise.all(
+      userAssistants.map(async (userAssistant) => {
+        const assistantDetails = await ctx.db
+          .query("aiAssistant")
+          .filter((q) => q.eq(q.field("_id"), userAssistant.assistantId))
+          .first();
+
+        return {
+          ...userAssistant,
+          assistant: assistantDetails || null,
+        };
+      }),
+    );
   },
 });
 

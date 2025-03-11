@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useContext, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -94,16 +92,16 @@ const AssistantList = () => {
               }`}
             >
               <Image
-                src={assistant.image}
-                alt={assistant.title}
+                src={assistant.assistant.image}
+                alt={assistant.assistant.title}
                 width={60}
                 height={60}
                 className="rounded-xl w-[60px] h-[60px] object-cover"
               />
               <div>
-                <h2 className="font-semibold">{assistant.name}</h2>
+                <h2 className="font-semibold">{assistant.assistant.name}</h2>
                 <h3 className="text-gray-600 text-sm dark:text-gray-300">
-                  {assistant.title}
+                  {assistant.assistant.title}
                 </h3>
               </div>
             </div>

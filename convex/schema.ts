@@ -10,15 +10,18 @@ export default defineSchema({
     orderId: v.optional(v.string()),
   }),
 
-  userAIAssistant: defineTable({
-    userId: v.string(),
-    assistantId: v.number(),
-    aiModelId: v.optional(v.string()),
+  aiAssistant: defineTable({
     name: v.string(),
     title: v.string(),
     image: v.string(),
     instruction: v.string(),
+    sampleQuestions: v.optional(v.array(v.string())),
+  }),
+
+  userAIAssistant: defineTable({
+    userId: v.string(),
+    assistantId: v.string(),
+    aiModelId: v.optional(v.string()),
     userInstruction: v.string(),
-    sampleQuestions: v.array(v.string()),
   }),
 });

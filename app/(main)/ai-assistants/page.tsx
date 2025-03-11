@@ -22,6 +22,7 @@ const AIAssistants = () => {
   const router = useRouter();
 
   const [selectedAssistants, setSelectedAssistants] = useState<any[]>([]);
+  const [hasAssistants, setHasAssistants] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -40,7 +41,7 @@ const AIAssistants = () => {
     );
 
     if (result.length > 0) {
-      router.replace("/workspace");
+      setHasAssistants(true);
     }
   };
 
@@ -88,7 +89,7 @@ const AIAssistants = () => {
 
   return (
     <>
-      <Header />
+      <Header hasAssistants={hasAssistants} />
       <div className="px-12 mt-16 md:px-24 lg:px-36 xl:px-48">
         <div className="flex justify-between items-center">
           <div className="gap-2">

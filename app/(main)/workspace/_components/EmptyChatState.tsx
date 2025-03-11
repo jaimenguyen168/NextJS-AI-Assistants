@@ -18,7 +18,7 @@ const EmptyChatState = () => {
       />
 
       <div className="mt-6 flex flex-col gap-4">
-        {currentAssistant?.sampleQuestions.map(
+        {currentAssistant?.assistant.sampleQuestions.map(
           (question: string, index: number) => (
             <BlurFade key={index} delay={0.15 * index}>
               <div className="p-4 flex border rounded-xl hover:bg-gray-100 hover:scale-105 cursor-pointer items-center justify-between">
