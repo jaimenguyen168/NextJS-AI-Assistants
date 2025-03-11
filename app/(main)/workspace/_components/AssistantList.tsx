@@ -11,6 +11,7 @@ import { AssistantContext } from "@/context/AssistantContext";
 import { BlurFade } from "@/components/magicui/blur-fade";
 import AddNewAssistantDialog from "@/app/(main)/workspace/_components/AddNewAssistantDialog";
 import AssistantListSeeAll from "@/app/(main)/workspace/_components/AssistantListSeeAll";
+import UserProfile from "@/app/(main)/workspace/_components/UserProfile";
 
 const AssistantList = () => {
   const { user } = useContext(AuthContext);
@@ -141,21 +142,7 @@ const AssistantList = () => {
         ))}
       </div>
 
-      <div className="w-[80%] p-2 absolute bottom-12 flex flex-col lg:flex-row cursor-pointer gap-3 items-center hover:bg-gray-200 hover:dark:bg-slate-700 hover:scale-105 rounded-2xl">
-        <Image
-          src={user?.profileImage}
-          alt="profile image"
-          width={40}
-          height={40}
-          className="rounded-full"
-        />
-        <div>
-          {!isMobile && <h2 className="font-semibold">{user?.name}</h2>}
-          <h3 className="text-sm text-gray-400">
-            {user?.orderId ? "Premium" : "Free"}
-          </h3>
-        </div>
-      </div>
+      <UserProfile user={user} isMobile={isMobile} />
     </div>
   );
 };

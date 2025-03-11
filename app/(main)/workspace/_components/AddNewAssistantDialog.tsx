@@ -113,6 +113,10 @@ const AddNewAssistantForm = ({ onSuccess }: { onSuccess: () => void }) => {
     setLoading(false);
   };
 
+  const handleClose = () => {
+    onSuccess();
+  };
+
   return (
     <div className="grid grid-cols-3 mt-4">
       <div className="border-r pr-6">
@@ -219,7 +223,7 @@ const AddNewAssistantForm = ({ onSuccess }: { onSuccess: () => void }) => {
         </div>
 
         <div className="flex items-center justify-end gap-3 mt-10">
-          <Button variant="secondary">
+          <Button variant="secondary" onClick={handleClose}>
             <XCircle />
             Cancel
           </Button>

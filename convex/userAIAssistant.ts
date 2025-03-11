@@ -144,6 +144,7 @@ export const getAllUserAIAssistants = query({
     const userAssistants = await ctx.db
       .query("userAIAssistant")
       .filter((q) => q.eq(q.field("userId"), userId))
+      .order("desc")
       .collect();
 
     return await Promise.all(
