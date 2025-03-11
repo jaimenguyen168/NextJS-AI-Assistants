@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useContext, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -22,16 +22,22 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import AssistantAvatar from "@/app/(main)/workspace/_components/AssistantAvatar";
 import { toast } from "sonner";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { AuthContext } from "@/context/AuthContext";
+import { AssistantContext } from "@/context/AssistantContext";
 
 const AddNewAssistantDialog = ({ children }: { children: ReactNode }) => {
+  const [open, setOpen] = useState(false);
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="w-full !max-w-3xl">
         <DialogHeader>
           <DialogTitle>Add New Assistant</DialogTitle>
           <DialogDescription asChild>
-            <AddNewAssistantForm />
+            <AddNewAssistantForm onSuccess={() => setOpen(false)} />
           </DialogDescription>
         </DialogHeader>
       </DialogContent>
@@ -47,9 +53,16 @@ const defaultAssistant = {
   userInstruction: "",
 };
 
-const AddNewAssistantForm = () => {
+const AddNewAssistantForm = ({ onSuccess }: { onSuccess: () => void }) => {
+  const { user } = useContext(AuthContext);
+  const addNewUserAIAssistant = useMutation(
+    api.userAIAssistant.addNewUserAIAssistant,
+  );
+  const { setCurrentAssistant } = useContext(AssistantContext);
+
   const [selectedAssistant, setSelectedAssistant] =
     useState<any>(defaultAssistant);
+  const [loading, setLoading] = useState(false);
 
   const handleSelectAssistant = (assistant: Assistant) => {
     setSelectedAssistant(assistant);
@@ -66,7 +79,7 @@ const AddNewAssistantForm = () => {
     setSelectedAssistant(defaultAssistant);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (
       !selectedAssistant.name ||
       !selectedAssistant.title ||
@@ -75,6 +88,27 @@ const AddNewAssistantForm = () => {
       toast("Please fill in all the fields");
       return;
     }
+
+    setLoading(true);
+
+    const result = await addNewUserAIAssistant({
+      userId: user._id,
+      name: selectedAssistant.name,
+      title: selectedAssistant.title,
+      image: selectedAssistant.image,
+      aiModelId: selectedAssistant.aiModelId,
+      userInstruction: selectedAssistant.userInstruction,
+    });
+
+    if (result) {
+      toast("Assistant added successfully");
+      setCurrentAssistant(result);
+      onSuccess();
+    } else {
+      toast("Something went wrong");
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -184,7 +218,7 @@ const AddNewAssistantForm = () => {
 
         <div className="flex items-center justify-end gap-3 mt-10">
           <Button variant="secondary">Cancel</Button>
-          <Button>Submit</Button>
+          <Button onClick={handleSubmit}>Submit</Button>
         </div>
       </div>
     </div>

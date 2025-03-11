@@ -31,12 +31,42 @@ export const insertUserAIAssistant = mutation({
   },
 });
 
+export const addNewUserAIAssistant = mutation({
+  args: {
+    userId: v.string(),
+    aiModelId: v.string(),
+    name: v.string(),
+    title: v.string(),
+    image: v.string(),
+    userInstruction: v.string(),
+  },
+  handler: async (
+    ctx,
+    { userId, aiModelId, name, title, image, userInstruction },
+  ) => {
+    const assistantId = await insertAIAssistant(ctx, {
+      name,
+      title,
+      image,
+    });
+
+    const result = await ctx.db.insert("userAIAssistant", {
+      userId,
+      aiModelId: aiModelId || "Google: Gemini 2.0 Flash",
+      assistantId,
+      userInstruction: userInstruction || "",
+    });
+
+    return await getUserAIAssistantById(ctx, { id: result });
+  },
+});
+
 export const insertAIAssistant = mutation({
   args: {
     name: v.string(),
     title: v.string(),
     image: v.string(),
-    instruction: v.string(),
+    instruction: v.optional(v.string()),
     sampleQuestions: v.optional(v.array(v.string())),
   },
   handler: async (
@@ -132,6 +162,20 @@ export const getAllUserAIAssistants = query({
   },
 });
 
+export const getUserAIAssistantById = query({
+  args: {
+    id: v.id("userAIAssistant"),
+  },
+  handler: async (ctx, { id }) => {
+    const userAIAssistant = await ctx.db.get(id);
+    if (!userAIAssistant) return null;
+
+    const assistant = await ctx.db.get(userAIAssistant.assistantId as any);
+
+    return { ...userAIAssistant, assistant };
+  },
+});
+
 export const updateUserAIAssistant = mutation({
   args: {
     id: v.id("userAIAssistant"),
@@ -139,9 +183,11 @@ export const updateUserAIAssistant = mutation({
     aiModelId: v.string(),
   },
   handler: async (ctx, { id, aiModelId, userInstruction }) => {
-    return await ctx.db.patch(id, {
+    await ctx.db.patch(id, {
       aiModelId,
       userInstruction,
     });
+
+    return await ctx.db.get(id);
   },
 });

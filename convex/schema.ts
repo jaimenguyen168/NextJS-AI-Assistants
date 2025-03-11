@@ -14,7 +14,7 @@ export default defineSchema({
     name: v.string(),
     title: v.string(),
     image: v.string(),
-    instruction: v.string(),
+    instruction: v.optional(v.string()),
     sampleQuestions: v.optional(v.array(v.string())),
   }),
 

@@ -6,7 +6,6 @@ import { useConvex } from "convex/react";
 import { useRouter } from "next/navigation";
 import { api } from "@/convex/_generated/api";
 import { Spinner } from "@/components/ui/spinner";
-import { aiAssistantList } from "@/constants";
 import Image from "next/image";
 import { AssistantContext } from "@/context/AssistantContext";
 import { BlurFade } from "@/components/magicui/blur-fade";
@@ -24,7 +23,7 @@ const AssistantList = () => {
 
   useEffect(() => {
     getUserAssistants().then((r) => {});
-  }, [user && currentAssistant === null]);
+  }, [user && currentAssistant]);
 
   const getUserAssistants = async (): Promise<void> => {
     if (!user) {

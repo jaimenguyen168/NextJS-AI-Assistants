@@ -1,7 +1,6 @@
 "use client";
 
 import React, { ReactNode, useContext, useEffect, useState } from "react";
-import Header from "@/app/(main)/_components/Header";
 import { getAuthUserData } from "@/services/api";
 import { useRouter } from "next/navigation";
 import { useConvex } from "convex/react";

@@ -92,7 +92,11 @@ const AssistantSettings = () => {
             <h2 className="font-semibold text-gray-500">Model</h2>
 
             <Select
-              defaultValue={currentAssistant.assistantId}
+              value={
+                aiModelList.find(
+                  (model) => model.name === currentAssistant.aiModelId,
+                )?.name || ""
+              }
               onValueChange={(value) => {
                 handleOnInputChange("aiModelId", value);
               }}
