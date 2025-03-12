@@ -42,6 +42,44 @@ const AssistantChat = () => {
 
   const onSendMessage = async () => {
     setLoading(true);
+
+    const userInput = input;
+    setInput("");
+    const aiModel = aiModelList.find(
+      (item) => item.name === currentAssistant.aiModelId,
+    );
+
+    const instruction = currentAssistant?.instruction || "No instruction";
+
+    const formattedMessages = messages.map((msg) => ({
+      role: msg.role,
+      content: [
+        {
+          type: "text",
+          content: {
+            text: msg.content,
+          },
+        },
+      ],
+    }));
+
+    formattedMessages.push({
+      role: "user",
+      content: [
+        {
+          type: "text",
+          content: {
+            text:
+              userInput +
+              " : " +
+              instruction +
+              " : " +
+              currentAssistant.userInstruction,
+          },
+        },
+      ],
+    });
+
     setMessages((prev) => [
       ...prev,
       {
@@ -54,28 +92,21 @@ const AssistantChat = () => {
       },
     ]);
 
-    const userInput = input;
-    setInput("");
-    const aiModel = aiModelList.find(
-      (item) => item.name === currentAssistant.aiModelId,
-    );
+    try {
+      const result = await axios.post("/api/eden-ai", {
+        provider: aiModel?.edenAi,
+        messages: formattedMessages,
+      });
 
-    const result = await axios.post("api/eden-ai", {
-      provider: aiModel?.edenAi,
-      input:
-        userInput +
-        " : " +
-        currentAssistant.instruction +
-        " : " +
-        currentAssistant.userInstruction,
-      aiLastMessage: messages[messages.length - 2]?.content,
-    });
+      setMessages((prev) => prev.slice(0, -1));
+      setMessages((prev) => [...prev, result.data]);
 
-    setLoading(false);
-    setMessages((prev) => prev.slice(0, -1));
-    setMessages((prev) => [...prev, result.data]);
-
-    await handleUserToken(result.data?.content);
+      await handleUserToken(result.data?.content);
+    } catch (error) {
+      console.error("Error calling AI:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleUserToken = async (text?: string) => {

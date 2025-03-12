@@ -62,7 +62,7 @@ const UserDetails = ({ onSuccess }: { onSuccess: () => void }) => {
         {hasOrderId ? (
           <div className="flex-col flex mt-2">
             <Button variant="secondary" className="w-full">
-              Cancel
+              Cancel Subscription
             </Button>
           </div>
         ) : (
