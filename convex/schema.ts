@@ -19,10 +19,20 @@ export default defineSchema({
     sampleQuestions: v.optional(v.array(v.string())),
   }),
 
+  chats: defineTable({
+    messages: v.array(
+      v.object({
+        role: v.string(),
+        content: v.string(),
+      }),
+    ),
+  }),
+
   userAIAssistant: defineTable({
     userId: v.string(),
     assistantId: v.string(),
     aiModelId: v.optional(v.string()),
+    chatId: v.optional(v.string()),
     userInstruction: v.string(),
   }),
 });

@@ -7,9 +7,11 @@ import { aiModelList } from "@/constants";
 import { AssistantContext } from "@/context/AssistantContext";
 import axios from "axios";
 import Image from "next/image";
-import { useMutation } from "convex/react";
+import { useConvex, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { AuthContext } from "@/context/AuthContext";
+import { addChatMessage, getChatById } from "@/convex/chats";
+import Spinner from "@/components/Spinner";
 
 type Message = {
   role: string;
@@ -26,6 +28,29 @@ const AssistantChat = () => {
   const [loading, setLoading] = useState(false);
 
   const updateUserTokens = useMutation(api.users.updateUserTokens);
+  const addChatMessage = useMutation(api.chats.addChatMessage);
+  const [loadingChat, setLoadingChat] = useState(true);
+
+  const convex = useConvex();
+
+  useEffect(() => {
+    if (currentAssistant?.chatId) {
+      getMessages().then(() => console.log("Done"));
+    }
+    setLoadingChat(false);
+  }, [currentAssistant?.chatId]);
+
+  const getMessages = async () => {
+    const result = await convex.query(api.chats.getChatById, {
+      chatId: currentAssistant?.chatId,
+    });
+
+    console.log("chat result", result);
+
+    if (result) {
+      setMessages(result as any);
+    }
+  };
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -48,6 +73,12 @@ const AssistantChat = () => {
     const aiModel = aiModelList.find(
       (item) => item.name === currentAssistant.aiModelId,
     );
+
+    await addChatMessage({
+      chatId: currentAssistant?.chatId,
+      role: "user",
+      content: userInput,
+    });
 
     const instruction = currentAssistant?.instruction || "No instruction";
 
@@ -101,6 +132,12 @@ const AssistantChat = () => {
       setMessages((prev) => prev.slice(0, -1));
       setMessages((prev) => [...prev, result.data]);
 
+      await addChatMessage({
+        chatId: currentAssistant?.chatId,
+        role: "assistant",
+        content: result.data.content,
+      });
+
       await handleUserToken(result.data?.content);
     } catch (error) {
       console.error("Error calling AI:", error);
@@ -122,6 +159,14 @@ const AssistantChat = () => {
       tokens: user.tokens + tokens,
     }));
   };
+
+  if (loadingChat) {
+    return (
+      <div className="flex-col items-center justify-center h-screen">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className="mt-8 p-12 relative h-[95vh]">

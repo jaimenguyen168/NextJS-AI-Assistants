@@ -20,11 +20,16 @@ export const insertUserAIAssistant = mutation({
           sampleQuestions: assistant.sampleQuestions,
         });
 
+        const chatId = await ctx.db.insert("chats", {
+          messages: [],
+        });
+
         return await ctx.db.insert("userAIAssistant", {
           userId,
           assistantId,
           aiModelId: aiModelId || "Google: Gemini 2.0 Flash",
           userInstruction: assistant.userInstruction || "",
+          chatId,
         });
       }),
     );
@@ -50,11 +55,16 @@ export const addNewUserAIAssistant = mutation({
       image,
     });
 
+    const chatId = await ctx.db.insert("chats", {
+      messages: [],
+    });
+
     const result = await ctx.db.insert("userAIAssistant", {
       userId,
       aiModelId: aiModelId || "Google: Gemini 2.0 Flash",
       assistantId,
       userInstruction: userInstruction || "",
+      chatId,
     });
 
     return await getUserAIAssistantById(ctx, { id: result });
