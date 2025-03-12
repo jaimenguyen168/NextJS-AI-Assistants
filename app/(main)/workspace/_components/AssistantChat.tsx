@@ -13,6 +13,7 @@ import { AuthContext } from "@/context/AuthContext";
 import { addChatMessage, getChatById } from "@/convex/chats";
 import Spinner from "@/components/Spinner";
 import { updateModifiedUserAIAssistant } from "@/convex/userAIAssistant";
+import { toast } from "sonner";
 
 type Message = {
   role: string;
@@ -70,6 +71,11 @@ const AssistantChat = () => {
   }, [currentAssistant]);
 
   const onSendMessage = async () => {
+    if (!currentAssistant?.chatId) {
+      toast("Please select an assistant to chat with.");
+      return;
+    }
+
     setLoading(true);
 
     const userInput = input;
