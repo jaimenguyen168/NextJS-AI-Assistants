@@ -8,6 +8,7 @@ import { api } from "@/convex/_generated/api";
 import { AuthContext } from "@/context/AuthContext";
 import { AssistantContext } from "@/context/AssistantContext";
 import Spinner from "@/components/Spinner";
+import { USER_DATA } from "@/constants/keys";
 
 const MainProvider = ({
   children,
@@ -28,7 +29,7 @@ const MainProvider = ({
   }, []);
 
   const checkUserAuth = async () => {
-    const userData = sessionStorage.getItem("user_data");
+    const userData = sessionStorage.getItem(USER_DATA);
     if (!userData) {
       router.replace("/signin");
       return;

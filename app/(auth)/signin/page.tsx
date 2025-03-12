@@ -9,6 +9,7 @@ import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { AuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import { USER_DATA, USER_TOKEN } from "@/constants/keys";
 
 const SignIn = () => {
   const createUserMutation = useMutation(api.users.createUser);
@@ -28,8 +29,8 @@ const SignIn = () => {
         profileImage: userData.picture,
       });
 
-      sessionStorage.setItem("user_token", tokenResponse.access_token);
-      sessionStorage.setItem("user_data", JSON.stringify(result));
+      sessionStorage.setItem(USER_TOKEN, tokenResponse.access_token);
+      sessionStorage.setItem(USER_DATA, JSON.stringify(result));
 
       setUser(result);
       router.replace("/ai-assistants");

@@ -11,19 +11,20 @@ import {
 import { LogOut, UserCircle2 } from "lucide-react";
 import UserProfileDialog from "@/app/(main)/workspace/_components/UserProfileDialog";
 import { useRouter } from "next/navigation";
+import { USER_DATA } from "@/constants/keys";
 
 const UserProfile = ({ user, setUser, isMobile, showBio = true }: any) => {
   const [openProfile, setOpenProfile] = useState(false);
   const router = useRouter();
 
   const handleSignOut = () => {
-    sessionStorage.removeItem("user_data");
+    sessionStorage.removeItem(USER_DATA);
     setUser(null);
     router.replace("/");
   };
 
   return (
-    <div>
+    <div className="w-full">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <div className="p-2 flex flex-col lg:flex-row cursor-pointer gap-3 items-center hover:bg-gray-200 hover:dark:bg-slate-700 hover:scale-105 rounded-2xl">

@@ -16,13 +16,15 @@ const Header = ({ hasAssistants }: { hasAssistants: boolean }) => {
     <div className="py-4 px-6 shadow-md flex items-center justify-between">
       <Image src="/logo.svg" alt="logo" width={40} height={40} />
 
-      <div className="flex items-center gap-3">
+      <div className="flex flex-row items-center gap-3">
         {hasAssistants && (
           <div
             onClick={handleGoToAssistants}
             className="bg-amber-200 px-4 py-2 rounded-xl hover:bg-amber-300 hover:scale-105"
           >
-            <h2 className="text-sm font-semibold">My Assistants</h2>
+            <h2 className="text-sm font-semibold whitespace-nowrap">
+              My Assistants
+            </h2>
           </div>
         )}
         <UserProfile

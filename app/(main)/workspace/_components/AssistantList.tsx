@@ -13,6 +13,8 @@ import AssistantListSeeAll from "@/app/(main)/workspace/_components/AssistantLis
 import UserProfile from "@/app/(main)/workspace/_components/UserProfile";
 import Spinner from "@/components/Spinner";
 
+const MAX_LENGTH = 5;
+
 const AssistantList = () => {
   const { user, setUser } = useContext(AuthContext);
   const { currentAssistant, setCurrentAssistant } =
@@ -49,7 +51,7 @@ const AssistantList = () => {
   );
 
   const visibleFilteredAssistants =
-    isMobile || filteredAssistants.length > 6
+    filteredAssistants.length > MAX_LENGTH
       ? filteredAssistants.slice(0, 3)
       : filteredAssistants;
 
@@ -119,7 +121,7 @@ const AssistantList = () => {
         />
 
         <div className="mt-6 space-y-2">
-          {(isMobile || assistantList.length > 6) && (
+          {assistantList.length > MAX_LENGTH && (
             <AssistantListSeeAll
               assistantList={assistantList}
               setSelectedAssistant={(assistant) => {

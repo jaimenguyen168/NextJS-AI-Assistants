@@ -4,13 +4,14 @@ import { redirect } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import Spinner from "@/components/Spinner";
 import { AuthContext } from "@/context/AuthContext";
+import { USER_DATA } from "@/constants/keys";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const { user, setUser } = useContext(AuthContext);
 
   useEffect(() => {
-    const storedUser = sessionStorage.getItem("user_data");
+    const storedUser = sessionStorage.getItem(USER_DATA);
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
