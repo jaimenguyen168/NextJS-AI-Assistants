@@ -20,8 +20,6 @@ const SignIn = () => {
     onSuccess: async (tokenResponse) => {
       if (typeof window === "undefined") return;
 
-      localStorage.setItem("user_token", tokenResponse.access_token);
-
       const userData = await getAuthUserData(tokenResponse.access_token);
 
       const result = await createUserMutation({
@@ -29,6 +27,9 @@ const SignIn = () => {
         email: userData.email,
         profileImage: userData.picture,
       });
+
+      localStorage.setItem("user_token", tokenResponse.access_token);
+      localStorage.setItem("user_data", JSON.stringify(result));
 
       setUser(result);
       router.replace("/ai-assistants");

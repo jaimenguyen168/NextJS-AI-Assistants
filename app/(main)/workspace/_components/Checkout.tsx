@@ -8,8 +8,17 @@ import convertToSubcurrency from "@/lib/convertToSubcurrency";
 import { Loader2Icon, WalletCardsIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Spinner from "@/components/Spinner";
+import { toast } from "sonner";
 
-const Checkout = ({ amount }: { amount: number }) => {
+const Checkout = ({
+  email,
+  amount,
+  onSuccess,
+}: {
+  email: string;
+  amount: number;
+  onSuccess: () => void;
+}) => {
   const stripe = useStripe();
   const elements = useElements();
   const [errorMessage, setErrorMessage] = useState<string>();
@@ -23,7 +32,10 @@ const Checkout = ({ amount }: { amount: number }) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ amount: convertToSubcurrency(amount) }),
+      body: JSON.stringify({
+        amount: convertToSubcurrency(amount),
+        customerEmail: email,
+      }),
     })
       .then((res) => res.json())
       .then((data) => setClientSecret(data.clientSecret));
@@ -47,19 +59,31 @@ const Checkout = ({ amount }: { amount: number }) => {
       return;
     }
 
-    const { error } = await stripe.confirmPayment({
+    const { paymentIntent, error } = await stripe.confirmPayment({
       elements,
       clientSecret,
       confirmParams: {
-        return_url: `http://www.localhost:3000/payment-success?amount=${amount}`,
+        return_url: window.location.href,
       },
+      redirect: "if_required",
     });
 
     if (error) {
       setErrorMessage(error.message);
-    } else {
-      // The payment UI automatically closes with a success animation.
-      // Your customer is redirected to your `return_url`.
+    } else if (paymentIntent?.status === "requires_action") {
+      // Handle additional authentication (3D Secure, etc.)
+      const { error: actionError } =
+        await stripe.handleCardAction(clientSecret);
+
+      if (actionError) {
+        setErrorMessage(actionError.message);
+      } else {
+        onSuccess();
+        toast.success("Payment successful!");
+      }
+    } else if (paymentIntent?.status === "succeeded") {
+      onSuccess();
+      toast.success("Payment successful!");
     }
 
     setLoading(false);

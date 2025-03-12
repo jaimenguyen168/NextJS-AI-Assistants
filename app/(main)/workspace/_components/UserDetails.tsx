@@ -4,7 +4,6 @@ import { AuthContext } from "@/context/AuthContext";
 import Image from "next/image";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { WalletCardsIcon } from "lucide-react";
 import { Elements } from "@stripe/react-stripe-js";
 import convertToSubcurrency from "@/lib/convertToSubcurrency";
 import Checkout from "@/app/(main)/workspace/_components/Checkout";
@@ -16,7 +15,7 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 
 const SUBSCRIPTION_AMOUNT = 9.99;
 
-const UserDetails = () => {
+const UserDetails = ({ onSuccess }: { onSuccess: () => void }) => {
   const { user } = useContext(AuthContext);
   const hasOrderId = user?.orderId;
   const userCredits = user?.credits;
@@ -89,7 +88,11 @@ const UserDetails = () => {
                 currency: "usd",
               }}
             >
-              <Checkout amount={SUBSCRIPTION_AMOUNT} />
+              <Checkout
+                email={user?.email}
+                amount={SUBSCRIPTION_AMOUNT}
+                onSuccess={onSuccess}
+              />
             </Elements>
           </div>
         )}

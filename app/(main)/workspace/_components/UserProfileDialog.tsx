@@ -21,7 +21,7 @@ const UserProfileDialog = ({
         <DialogHeader>
           <DialogTitle hidden />
           <DialogDescription asChild>
-            <UserDetails />
+            <UserDetails onSuccess={setOpenDialog} />
           </DialogDescription>
         </DialogHeader>
       </DialogContent>
