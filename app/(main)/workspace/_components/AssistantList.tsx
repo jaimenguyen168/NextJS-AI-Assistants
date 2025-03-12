@@ -5,13 +5,13 @@ import { AuthContext } from "@/context/AuthContext";
 import { useConvex } from "convex/react";
 import { useRouter } from "next/navigation";
 import { api } from "@/convex/_generated/api";
-import { Spinner } from "@/components/ui/spinner";
 import Image from "next/image";
 import { AssistantContext } from "@/context/AssistantContext";
 import { BlurFade } from "@/components/magicui/blur-fade";
 import AddNewAssistantDialog from "@/app/(main)/workspace/_components/AddNewAssistantDialog";
 import AssistantListSeeAll from "@/app/(main)/workspace/_components/AssistantListSeeAll";
 import UserProfile from "@/app/(main)/workspace/_components/UserProfile";
+import Spinner from "@/components/Spinner";
 
 const AssistantList = () => {
   const { user } = useContext(AuthContext);
@@ -79,7 +79,7 @@ const AssistantList = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <Spinner size="lg" className="bg-black dark:bg-white" />
+        <Spinner />
       </div>
     );
   }

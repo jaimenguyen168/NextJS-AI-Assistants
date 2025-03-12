@@ -6,8 +6,8 @@ import { useRouter } from "next/navigation";
 import { useConvex } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { AuthContext } from "@/context/AuthContext";
-import { Spinner } from "@/components/ui/spinner";
 import { AssistantContext } from "@/context/AssistantContext";
+import Spinner from "@/components/Spinner";
 
 const MainProvider = ({
   children,
@@ -64,7 +64,7 @@ const MainProvider = ({
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <Spinner size="lg" className="bg-black dark:bg-white" />
+        <Spinner />
       </div>
     );
   }
