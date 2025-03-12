@@ -12,11 +12,9 @@ export const createUser = mutation({
     const user = await ctx.db
       .query("users")
       .filter((q) => q.eq(q.field("email"), email))
-      .collect();
+      .first();
 
-    if (user.length > 0) {
-      return user[0];
-    }
+    if (user) return user;
 
     // add new user
     const newUser = {
@@ -24,6 +22,7 @@ export const createUser = mutation({
       email,
       profileImage,
       credits: 50000,
+      tokens: 0,
     };
     await ctx.db.insert("users", newUser);
 

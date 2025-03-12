@@ -18,8 +18,8 @@ const SUBSCRIPTION_AMOUNT = 9.99;
 const UserDetails = ({ onSuccess }: { onSuccess: () => void }) => {
   const { user } = useContext(AuthContext);
   const hasOrderId = user?.orderId;
-  const userCredits = user?.credits;
-  const userTokens = user?.tokens;
+  const userCredits = user?.credits ?? 0;
+  const userTokens = user?.tokens ?? 0;
   const creditProgress = (userTokens / userCredits) * 100;
 
   return (
