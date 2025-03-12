@@ -45,7 +45,8 @@ const UserDetails = ({ onSuccess }: { onSuccess: () => void }) => {
         <div>
           <h2 className="font-semibold">Token Usage</h2>
           <h3>
-            {userTokens.toLocaleString()} / {userCredits.toLocaleString()}
+            {userTokens && userTokens.toLocaleString()} /{" "}
+            {userCredits && userCredits.toLocaleString()}
           </h3>
         </div>
         <Progress value={creditProgress} />
