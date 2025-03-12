@@ -2,9 +2,10 @@ import React, { useContext } from "react";
 import Image from "next/image";
 import { AuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import UserProfile from "@/app/(main)/workspace/_components/UserProfile";
 
 const Header = ({ hasAssistants }: { hasAssistants: boolean }) => {
-  const { user } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
   const router = useRouter();
 
   const handleGoToAssistants = () => {
@@ -15,7 +16,7 @@ const Header = ({ hasAssistants }: { hasAssistants: boolean }) => {
     <div className="py-4 px-6 shadow-md flex items-center justify-between">
       <Image src="/logo.svg" alt="logo" width={40} height={40} />
 
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-3">
         {hasAssistants && (
           <div
             onClick={handleGoToAssistants}
@@ -24,12 +25,11 @@ const Header = ({ hasAssistants }: { hasAssistants: boolean }) => {
             <h2 className="text-sm font-semibold">My Assistants</h2>
           </div>
         )}
-        <Image
-          src={user?.profileImage}
-          alt="profile image"
-          width={40}
-          height={40}
-          className="rounded-full"
+        <UserProfile
+          user={user}
+          setUser={setUser}
+          isMobile={true}
+          showBio={false}
         />
       </div>
     </div>

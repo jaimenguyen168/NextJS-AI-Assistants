@@ -61,6 +61,7 @@ export const addNewUserAIAssistant = mutation({
     const chatId = await ctx.db.insert("chats", {
       messages: [],
     });
+    const now = Date.now();
 
     const result = await ctx.db.insert("userAIAssistant", {
       userId,
@@ -68,6 +69,7 @@ export const addNewUserAIAssistant = mutation({
       assistantId,
       userInstruction: userInstruction || "",
       chatId,
+      modifiedAt: now,
     });
 
     return await getUserAIAssistantById(ctx, { id: result });

@@ -10,19 +10,19 @@ const Workspace = () => {
   const { currentAssistant } = useContext(AssistantContext);
 
   return (
-    <div className="h-screen w-full">
-      <div className="grid grid-cols-5">
-        <div className="hidden md:block">
+    <div className="h-screen w-screen flex overflow-hidden">
+      <div className="grid grid-cols-6 w-full">
+        <div className="hidden sm:block">
           <AssistantList />
         </div>
 
         <div
-          className={`lg:col-span-3 md:col-span-4 sm:col-span-5 ${!currentAssistant ? "!col-span-4" : "col-span-5"}`}
+          className={`lg:col-span-4 md:col-span-5 sm:col-span-6 ${!currentAssistant ? "!col-span-5" : "col-span-6"}`}
         >
           <AssistantChat />
         </div>
 
-        <div className="hidden md:block">
+        <div className={`hidden ${currentAssistant && "lg:block"}`}>
           <AssistantSettings />
         </div>
       </div>

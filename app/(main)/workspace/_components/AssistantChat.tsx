@@ -174,7 +174,7 @@ const AssistantChat = () => {
   }
 
   return (
-    <div className="mt-8 p-12 relative h-[95vh]">
+    <div className="mt-8 p-12 relative h-[95vh] w-full">
       {messages.length === 0 && <EmptyChatState />}
 
       <div
@@ -186,20 +186,23 @@ const AssistantChat = () => {
             key={index}
             className={`flex ${
               message.role === "user"
-                ? "justify-end ml-12 "
-                : "justify-start mr-12"
+                ? "justify-end ml-16"
+                : "justify-start mr-24"
             }`}
           >
             <div className="flex gap-4">
-              {message.role === "assistant" && (
-                <Image
-                  src={currentAssistant?.assistant.image}
-                  alt={currentAssistant?.assistant.title}
-                  width={100}
-                  height={100}
-                  className="w-[40px] h-[40px] rounded-full"
-                />
-              )}
+              {message.role === "assistant" &&
+                currentAssistant?.assistant.image && (
+                  <Image
+                    src={currentAssistant.assistant.image}
+                    alt={
+                      currentAssistant?.assistant.title || "Assistant Avatar"
+                    }
+                    width={100}
+                    height={100}
+                    className="w-[40px] h-[40px] rounded-full"
+                  />
+                )}
               <div
                 className={`p-4 flex rounded-b-3xl gap-3 ${
                   message.role === "user"

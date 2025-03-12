@@ -66,7 +66,7 @@ const AssistantSettings = () => {
 
   return (
     currentAssistant && (
-      <div className="p-5 bg-secondary border-l-[1px] h-screen space-y-6 relative">
+      <div className="p-5 bg-secondary border-l-[1px] h-screen w-full space-y-6 relative">
         <h2 className="font-bold text-xl">Settings</h2>
 
         <BlurFade delay={0.25}>

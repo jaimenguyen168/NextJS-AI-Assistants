@@ -10,28 +10,40 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { LogOut, UserCircle2 } from "lucide-react";
 import UserProfileDialog from "@/app/(main)/workspace/_components/UserProfileDialog";
+import { useRouter } from "next/navigation";
 
-const UserProfile = ({ user, isMobile }: any) => {
+const UserProfile = ({ user, setUser, isMobile, showBio = true }: any) => {
   const [openProfile, setOpenProfile] = useState(false);
+  const router = useRouter();
+
+  const handleSignOut = () => {
+    sessionStorage.removeItem("user_data");
+    setUser(null);
+    router.replace("/");
+  };
 
   return (
-    <>
+    <div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <div className="w-[80%] p-2 absolute bottom-12 flex flex-col lg:flex-row cursor-pointer gap-3 items-center hover:bg-gray-200 hover:dark:bg-slate-700 hover:scale-105 rounded-2xl">
-            <Image
-              src={user?.profileImage}
-              alt="profile image"
-              width={40}
-              height={40}
-              className="rounded-full"
-            />
-            <div>
-              {!isMobile && <h2 className="font-semibold">{user?.name}</h2>}
-              <h3 className="text-sm text-gray-400">
-                {user?.orderId ? "Premium" : "Free"}
-              </h3>
-            </div>
+          <div className="p-2 flex flex-col lg:flex-row cursor-pointer gap-3 items-center hover:bg-gray-200 hover:dark:bg-slate-700 hover:scale-105 rounded-2xl">
+            {user?.profileImage && (
+              <Image
+                src={user.profileImage}
+                alt="profile image"
+                width={40}
+                height={40}
+                className="rounded-full"
+              />
+            )}
+            {showBio && (
+              <div>
+                {!isMobile && <h2 className="font-semibold">{user?.name}</h2>}
+                <h3 className="text-sm text-gray-400">
+                  {user?.orderId ? "Premium" : "Free"}
+                </h3>
+              </div>
+            )}
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-[150px]">
@@ -42,7 +54,7 @@ const UserProfile = ({ user, isMobile }: any) => {
           <DropdownMenuItem onClick={() => setOpenProfile(true)}>
             <UserCircle2 /> Profile
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={handleSignOut}>
             <LogOut /> Logout
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -52,7 +64,7 @@ const UserProfile = ({ user, isMobile }: any) => {
         openDialog={openProfile}
         setOpenDialog={() => setOpenProfile(false)}
       />
-    </>
+    </div>
   );
 };
 export default UserProfile;

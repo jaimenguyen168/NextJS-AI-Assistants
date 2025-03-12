@@ -28,29 +28,23 @@ const MainProvider = ({
   }, []);
 
   const checkUserAuth = async () => {
-    const userToken = localStorage.getItem("user_token");
-    if (!userToken) {
-      router.replace("/signin");
-      return;
-    }
-
-    const userData = userToken && (await getAuthUserData(userToken));
-
+    const userData = sessionStorage.getItem("user_data");
     if (!userData) {
       router.replace("/signin");
       return;
     }
 
+    const data = JSON.parse(userData);
+
     try {
       const user = await convex.query(api.users.getUser, {
-        email: userData.email,
+        email: data.email,
       });
 
       if (!user) {
         router.replace("/signin");
         return;
       }
-      console.log("User is ", user);
 
       setUser(user);
     } catch (err) {
