@@ -28,8 +28,8 @@ const SignIn = () => {
         profileImage: userData.picture,
       });
 
-      localStorage.setItem("user_token", tokenResponse.access_token);
-      localStorage.setItem("user_data", JSON.stringify(result));
+      sessionStorage.setItem("user_token", tokenResponse.access_token);
+      sessionStorage.setItem("user_data", JSON.stringify(result));
 
       setUser(result);
       router.replace("/ai-assistants");
