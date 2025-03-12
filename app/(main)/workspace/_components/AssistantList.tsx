@@ -37,7 +37,6 @@ const AssistantList = () => {
     };
   }, []);
 
-  const [showAll, setShowAll] = useState(false);
   const visibleAssistants =
     isMobile || assistantList.length > 6
       ? assistantList.slice(0, 3)
@@ -64,7 +63,13 @@ const AssistantList = () => {
       console.log(result);
       if (result.length === 0) router.replace("/ai-assistants");
 
-      setAssistantList(result);
+      const sortedList = result.sort((a, b) => {
+        const timeA = a.modifiedAt ?? 0;
+        const timeB = b.modifiedAt ?? 0;
+        return timeB - timeA;
+      });
+
+      setAssistantList(sortedList);
     } catch (err) {
       router.replace("/signin");
     } finally {

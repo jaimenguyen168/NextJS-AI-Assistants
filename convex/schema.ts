@@ -34,5 +34,6 @@ export default defineSchema({
     aiModelId: v.optional(v.string()),
     chatId: v.optional(v.string()),
     userInstruction: v.string(),
+    modifiedAt: v.optional(v.number()),
   }),
 });

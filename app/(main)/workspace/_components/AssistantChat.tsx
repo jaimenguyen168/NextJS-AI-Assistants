@@ -12,6 +12,7 @@ import { api } from "@/convex/_generated/api";
 import { AuthContext } from "@/context/AuthContext";
 import { addChatMessage, getChatById } from "@/convex/chats";
 import Spinner from "@/components/Spinner";
+import { updateModifiedUserAIAssistant } from "@/convex/userAIAssistant";
 
 type Message = {
   role: string;
@@ -29,6 +30,9 @@ const AssistantChat = () => {
 
   const updateUserTokens = useMutation(api.users.updateUserTokens);
   const addChatMessage = useMutation(api.chats.addChatMessage);
+  const updateModifiedUserAIAssistant = useMutation(
+    api.userAIAssistant.updateModifiedUserAIAssistant,
+  );
   const [loadingChat, setLoadingChat] = useState(true);
 
   const convex = useConvex();
@@ -139,6 +143,7 @@ const AssistantChat = () => {
       });
 
       await handleUserToken(result.data?.content);
+      await updateModifiedUserAIAssistant({ id: currentAssistant?._id });
     } catch (error) {
       console.error("Error calling AI:", error);
     } finally {

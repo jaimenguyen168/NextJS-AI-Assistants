@@ -1,5 +1,6 @@
 import { mutation, query } from "@/convex/_generated/server";
 import { v } from "convex/values";
+import { insertAIAssistant } from "@/convex/aiAssistant";
 
 export const insertUserAIAssistant = mutation({
   args: {
@@ -23,6 +24,7 @@ export const insertUserAIAssistant = mutation({
         const chatId = await ctx.db.insert("chats", {
           messages: [],
         });
+        const now = Date.now();
 
         return await ctx.db.insert("userAIAssistant", {
           userId,
@@ -30,6 +32,7 @@ export const insertUserAIAssistant = mutation({
           aiModelId: aiModelId || "Google: Gemini 2.0 Flash",
           userInstruction: assistant.userInstruction || "",
           chatId,
+          modifiedAt: now,
         });
       }),
     );
@@ -68,28 +71,6 @@ export const addNewUserAIAssistant = mutation({
     });
 
     return await getUserAIAssistantById(ctx, { id: result });
-  },
-});
-
-export const insertAIAssistant = mutation({
-  args: {
-    name: v.string(),
-    title: v.string(),
-    image: v.string(),
-    instruction: v.optional(v.string()),
-    sampleQuestions: v.optional(v.array(v.string())),
-  },
-  handler: async (
-    ctx,
-    { name, title, image, instruction, sampleQuestions },
-  ) => {
-    return await ctx.db.insert("aiAssistant", {
-      name,
-      title,
-      image,
-      instruction,
-      sampleQuestions: sampleQuestions || [],
-    });
   },
 });
 
@@ -154,7 +135,6 @@ export const getAllUserAIAssistants = query({
     const userAssistants = await ctx.db
       .query("userAIAssistant")
       .filter((q) => q.eq(q.field("userId"), userId))
-      .order("desc")
       .collect();
 
     return await Promise.all(
@@ -194,11 +174,27 @@ export const updateUserAIAssistant = mutation({
     aiModelId: v.string(),
   },
   handler: async (ctx, { id, aiModelId, userInstruction }) => {
+    const now = Date.now();
+
     await ctx.db.patch(id, {
       aiModelId,
       userInstruction,
+      modifiedAt: now,
     });
 
     return await ctx.db.get(id);
+  },
+});
+
+export const updateModifiedUserAIAssistant = mutation({
+  args: {
+    id: v.id("userAIAssistant"),
+  },
+  handler: async (ctx, { id }) => {
+    const now = Date.now();
+
+    await ctx.db.patch(id, {
+      modifiedAt: now,
+    });
   },
 });
