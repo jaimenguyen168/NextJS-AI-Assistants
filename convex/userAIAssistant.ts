@@ -1,6 +1,7 @@
 import { mutation, query } from "@/convex/_generated/server";
 import { v } from "convex/values";
-import { insertAIAssistant } from "@/convex/aiAssistant";
+import { deleteAIAssistantById, insertAIAssistant } from "@/convex/aiAssistant";
+import { deleteChatById } from "@/convex/chats";
 
 export const insertUserAIAssistant = mutation({
   args: {
@@ -9,7 +10,7 @@ export const insertUserAIAssistant = mutation({
     aiModelId: v.optional(v.string()),
   },
   handler: async (ctx, { userId, assistantList, aiModelId }) => {
-    await deleteUserAIAssistantByUserId(ctx, { userId });
+    // await deleteUserAIAssistantByUserId(ctx, { userId });
 
     return await Promise.all(
       assistantList.map(async (assistant: any) => {
@@ -104,15 +105,6 @@ export const deleteUserAIAssistantByUserId = mutation({
   },
 });
 
-export const deleteAIAssistantById = mutation({
-  args: {
-    assistantId: v.id("aiAssistant"),
-  },
-  handler: async (ctx, { assistantId }) => {
-    await ctx.db.delete(assistantId);
-  },
-});
-
 export const deleteUserAIAssistantById = mutation({
   args: {
     id: v.id("userAIAssistant"),
@@ -122,8 +114,20 @@ export const deleteUserAIAssistantById = mutation({
       .query("userAIAssistant")
       .filter((q) => q.eq(q.field("_id"), id))
       .first();
-    const assistantId = userAIAssistant?.assistantId as any;
-    await deleteAIAssistantById(ctx, { assistantId });
+
+    if (!userAIAssistant) {
+      throw new Error("User AI Assistant not found.");
+    }
+
+    if (userAIAssistant.chatId) {
+      await deleteChatById(ctx, { chatId: userAIAssistant.chatId as any });
+    }
+
+    if (userAIAssistant.assistantId) {
+      await deleteAIAssistantById(ctx, {
+        assistantId: userAIAssistant.assistantId as any,
+      });
+    }
 
     await ctx.db.delete(id);
   },

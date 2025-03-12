@@ -22,6 +22,7 @@ const AssistantList = () => {
   const router = useRouter();
   const [assistantList, setAssistantList] = useState<any>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -37,10 +38,20 @@ const AssistantList = () => {
     };
   }, []);
 
-  const visibleAssistants =
-    isMobile || assistantList.length > 6
-      ? assistantList.slice(0, 3)
-      : assistantList;
+  const filteredAssistants = assistantList.filter(
+    (assistant: any) =>
+      assistant.assistant.name
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      assistant.assistant.title
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()),
+  );
+
+  const visibleFilteredAssistants =
+    isMobile || filteredAssistants.length > 6
+      ? filteredAssistants.slice(0, 3)
+      : filteredAssistants;
 
   useEffect(() => {
     getUserAssistants().then((r) => {});
@@ -100,7 +111,12 @@ const AssistantList = () => {
           </Button>
         </AddNewAssistantDialog>
 
-        <Input className="bg-white" placeholder="Search" />
+        <Input
+          className="bg-white"
+          placeholder="Search"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
 
         <div className="mt-6 space-y-2">
           {(isMobile || assistantList.length > 6) && (
@@ -114,7 +130,7 @@ const AssistantList = () => {
             </AssistantListSeeAll>
           )}
 
-          {visibleAssistants.map((assistant: any) => (
+          {visibleFilteredAssistants.map((assistant: any) => (
             <BlurFade
               key={assistant.assistantId}
               delay={0.25 + assistant.assistantId * 0.05}

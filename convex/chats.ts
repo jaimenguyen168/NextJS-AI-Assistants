@@ -36,3 +36,12 @@ export const getChatById = query({
     return chat.messages;
   },
 });
+
+export const deleteChatById = mutation({
+  args: {
+    chatId: v.id("chats"),
+  },
+  handler: async (ctx, { chatId }) => {
+    await ctx.db.delete(chatId);
+  },
+});

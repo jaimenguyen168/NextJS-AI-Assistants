@@ -26,7 +26,7 @@ const AssistantListSeeAll = ({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
       <PopoverContent>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col h-[400px] gap-2 overflow-y-scroll">
           {assistantList.map((assistant: any, index: number) => (
             <div
               key={index}

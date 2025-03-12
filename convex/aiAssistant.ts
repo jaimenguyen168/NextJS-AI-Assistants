@@ -22,3 +22,12 @@ export const insertAIAssistant = mutation({
     });
   },
 });
+
+export const deleteAIAssistantById = mutation({
+  args: {
+    assistantId: v.id("aiAssistant"),
+  },
+  handler: async (ctx, { assistantId }) => {
+    await ctx.db.delete(assistantId);
+  },
+});
