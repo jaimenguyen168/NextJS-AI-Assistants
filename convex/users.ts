@@ -42,3 +42,33 @@ export const getUser = query({
       .first();
   },
 });
+
+export const updateUserTokens = mutation({
+  args: {
+    id: v.id("users"),
+    tokens: v.number(),
+  },
+  handler: async (ctx, { id, tokens }) => {
+    const user = await ctx.db.get(id);
+    const currentTokens = user?.tokens ?? 0;
+    const updatedTokens = currentTokens + tokens;
+
+    await ctx.db.patch(id, {
+      tokens: updatedTokens,
+    });
+  },
+});
+
+export const updateUserPlan = mutation({
+  args: {
+    id: v.id("users"),
+    orderId: v.string(),
+    credits: v.number(),
+  },
+  handler: async (ctx, { id, orderId, credits }) => {
+    await ctx.db.patch(id as any, {
+      orderId,
+      credits,
+    });
+  },
+});

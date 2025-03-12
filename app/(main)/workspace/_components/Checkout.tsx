@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   PaymentElement,
   useElements,
@@ -9,16 +9,19 @@ import { Loader2Icon, WalletCardsIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Spinner from "@/components/Spinner";
 import { toast } from "sonner";
+import { updateUserPlan } from "@/convex/users";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { AuthContext } from "@/context/AuthContext";
 
 const Checkout = ({
-  email,
   amount,
   onSuccess,
 }: {
-  email: string;
   amount: number;
   onSuccess: () => void;
 }) => {
+  const { user, setUser } = useContext(AuthContext);
   const stripe = useStripe();
   const elements = useElements();
   const [errorMessage, setErrorMessage] = useState<string>();
@@ -26,7 +29,11 @@ const Checkout = ({
   const [loading, setLoading] = useState(false);
   const [showPaymentElement, setShowPaymentElement] = useState(false);
 
+  const updateUserPlan = useMutation(api.users.updateUserPlan);
+
   useEffect(() => {
+    if (!user) return;
+
     fetch("/api/payment-intent", {
       method: "POST",
       headers: {
@@ -34,7 +41,7 @@ const Checkout = ({
       },
       body: JSON.stringify({
         amount: convertToSubcurrency(amount),
-        customerEmail: email,
+        customerEmail: user?.email,
       }),
     })
       .then((res) => res.json())
@@ -78,15 +85,31 @@ const Checkout = ({
       if (actionError) {
         setErrorMessage(actionError.message);
       } else {
+        await handleUserUpgrade(paymentIntent.id);
         onSuccess();
         toast.success("Payment successful!");
       }
     } else if (paymentIntent?.status === "succeeded") {
+      await handleUserUpgrade(paymentIntent.id);
       onSuccess();
       toast.success("Payment successful!");
     }
 
     setLoading(false);
+  };
+
+  const handleUserUpgrade = async (orderId: string) => {
+    await updateUserPlan({
+      id: user?._id,
+      orderId: orderId,
+      credits: 500000,
+    });
+
+    setUser((user: any) => ({
+      ...user,
+      orderId: orderId,
+      credits: 500000,
+    }));
   };
 
   if (!clientSecret || !stripe || !elements) {

@@ -88,11 +88,7 @@ const UserDetails = ({ onSuccess }: { onSuccess: () => void }) => {
                 currency: "usd",
               }}
             >
-              <Checkout
-                email={user?.email}
-                amount={SUBSCRIPTION_AMOUNT}
-                onSuccess={onSuccess}
-              />
+              <Checkout amount={SUBSCRIPTION_AMOUNT} onSuccess={onSuccess} />
             </Elements>
           </div>
         )}

@@ -25,7 +25,7 @@ const AssistantChat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const updateUserTokens = useMutation(api.userAIAssistant.updateUserTokens);
+  const updateUserTokens = useMutation(api.users.updateUserTokens);
 
   useEffect(() => {
     if (scrollRef.current) {

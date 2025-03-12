@@ -1,7 +1,7 @@
 "use client";
 
 import React, { ReactNode, useContext, useEffect, useState } from "react";
-import { getAuthUserData } from "@/services/api";
+import { getAuthUserData } from "@/services/google-auth";
 import { useRouter } from "next/navigation";
 import { useConvex } from "convex/react";
 import { api } from "@/convex/_generated/api";

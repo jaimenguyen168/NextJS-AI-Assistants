@@ -4,7 +4,7 @@ import React, { useContext } from "react";
 import Image from "next/image";
 import { useGoogleLogin } from "@react-oauth/google";
 import { Button } from "@/components/ui/button";
-import { getAuthUserData } from "@/services/api";
+import { getAuthUserData } from "@/services/google-auth";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { AuthContext } from "@/context/AuthContext";
